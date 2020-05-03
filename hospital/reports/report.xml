@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <report
+            id="action_report_patient_card"
+            string="Patient Card"
+            model="hospital.patient"
+            name="hospital.report_patient"
+            file="hospital.report_patient"
+            report_type="qweb-pdf"/>
+
+    <report
+            id="report_appointment"
+            string="Appointment"
+            model="hospital.patient"
+            name="hospital.appointment_report"
+            file="hospital.appointment_report"
+            report_type="qweb-pdf"/>
+
+
+    <report
+            id="action_report_patient_card_xlx"
+            string="Patient Card Excel"
+            model="hospital.patient"
+            name="hospital.report_patient_xls"
+            file="hospital.report_patient_xls"
+            report_type="xlsx"/>
+
+
+</odoo>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- TODO tree view of the appointment model-->
+        <record id="appointment_tree" model="ir.ui.view">
+            <field name="name">hospital.appointment.tree</field>
+            <field name="model">hospital.appointment</field>
+            <field name="arch" type="xml">
+                <tree string="Appointments">
+                    <field name="patient_id"/>
+                    <field name="patient_seq"/>
+                    <field name="appointment_seq"/>
+                    <field name="doctor_id"/>
+                    <field name="patient_age" sum="Total Of Ages"/> <!--avg="Total Average Of Ages"-->
+                    <field name="appointment_date"/>
+                    <field name="patient_image"/>
+                    <field name="patient_notes"/>
+                    <field name="appointment_notes"/>
+                </tree>
+            </field>
+        </record>
+        <!-- TODO form view of the appointment model-->
+        <record id="appointment_form" model="ir.ui.view">
+            <field name="name">hospital.appointment.form</field>
+            <field name="model">hospital.appointment</field>
+            <field name="arch" type="xml">
+                <form string="Appointments">
+                    <header>
+                        <button name="action_confirm" type="object" string="Confirm" class="oe_highlight"/>
+                        <button name="action_done" type="object" string="Done" class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
+                    </header>
+                    <sheet>
+                        <field name="patient_image" widget="image" class="oe_avatar"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"/>
+
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="patient_id"
+                                       options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                <field name="patient_age"/>
+                                <field name="patient_notes"/>
+                                <field name="doctor_id"
+                                       options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                            </group>
+                            <group>
+                                <field name="appointment_date"/>
+                                <field name="patient_seq"/>
+                                <field name="appointment_seq" readonly="1"/>
+                                <field name="patient_number" widget="phone"/>
+                                <field name="partner_id"/>
+                                <field name="order_id"/>
+
+                            </group>
+                        </group>
+                        <group>
+                            <field name="appointment_notes"/>
+                        </group>
+                        <notebook>
+                            <page string="Doctor Prescription">
+                                <field name="appointment_lines">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="product_qty"/>
+                                        <field name="appointment_id" invisible="0"/>
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <group>
+                                                <field name="product_id"/>
+                                                <field name="appointment_id"/>
+
+                                            </group>
+                                            <group>
+                                                <field name="product_qty"/>
+                                            </group>
+                                            <group>
+                                                <field name="appointment_id"
+                                                       invisible="1"/>  <!--invisible="1" => this means it will de disappeared-->
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Pharmacy">
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <!-- TODO chatter-->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <!-- TODO action of the appointment menu-->
+        <record id="action_appointment" model="ir.actions.act_window">
+            <field name="name">Appointment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hospital.appointment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create Your First Appointment !
+                </p>
+            </field>
+        </record>
+        <menuitem id="hospital_appointment" name="Appointments" parent="hospital_root" action="action_appointment"
+                  sequence="1"/>
+    </data>
+</odoo>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--TODO add new action to action button-->
+        <record id="action_patient_appointment" model="ir.actions.act_window">
+            <field name="name">Appointments</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hospital.appointment</field>
+            <field name="domain">[('patient_id', '=', active_id)]</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="hospital.appointment_tree"/>
+            <field name="binding_model_id" ref="model_hospital_patient"/>
+        </record>
+
+
+        <!--TODO inherit existing model and add new field in this-->
+        <record id="sale_order_inherit" model="ir.ui.view">
+            <field name="name">sale order inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="patient_name"/>
+                </xpath>
+            </field>
+        </record>
+        <!--TODO tree view of the patient model-->
+        <record id="patient_tree" model="ir.ui.view">
+            <field name="name">hospital.patient.tree</field>
+            <field name="model">hospital.patient</field>
+            <field name="arch" type="xml">
+                <tree string="patients">
+                    <field name="patient_name"/>
+                    <field name="name_seq"/>
+                    <field name="gender"/>
+                    <field name="patient_notes"/>
+                    <field name="doctor_id"/>
+                    <field name="patient_age"/>
+                    <field name="age_group"/>
+                    <field name="patient_image"/>
+                </tree>
+            </field>
+        </record>
+        <!--TODO form view of the patient model-->
+        <record id="patient_form" model="ir.ui.view">
+            <field name="name">hospital.patient.form</field>
+            <field name="model">hospital.patient</field>
+            <field name="arch" type="xml">
+                <form string="Patients">
+                    <header>
+                        <button name="%(hospital.create_appointment_wizard)d" string="Create Appointment" type="action"
+                                class="oe_highlight" context="{'default_patient_id': active_id}"/>
+
+                        <button name="action_send_card" string="Send By Email" type="object" class="oe_highlight"
+                                groups="hospital.group_hospital_manager"/> <!--TODO this used to show this field to manager group only
+                                                                                    groups="hospital.group_hospital_manager"-->
+
+
+                        <button name="print_report" string="Print Patient Card" type="object" class="oe_highlight"/>
+
+
+                    </header>
+                    <sheet>
+                        <!-- create new smart button-->
+                        <div class="oe_button_box" name="button_box">
+                            <button name="open_patient_appointment" type="object" class="oe_stat_button"
+                                    icon="fa-calendar">
+                                <field string="Appointments" name="appointment_count" widget="statinfo"/>
+                            </button>
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button"
+                                       options="{&quot;terminology&quot;: &quot;archive&quot;}"/>
+                            </button>
+                        </div>
+                        <field name="patient_image" widget="image" class="oe_avatar"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="patient_name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="patient_age"/>
+                                <field name="gender"/>
+                                <field name="doctor_id"
+                                       options="{'no_create_edit': True, 'no_create': True}"/>   <!--options={'no_create_edit': True, 'no_create': True} => to remove create && edit option-->
+                                <field name="user_id"/>
+
+                            </group>                                                                         <!--no_create_edit': True => to make it not open doctor details screen-->
+                            <group>
+                                <field name="patient_number" widget="phone" groups="hospital.group_hospital_manager"/> <!--TODO this used to show this field to manager group only
+                                                                                                                              groups="hospital.group_hospital_manager"-->
+
+                                <field name="age_group"/>
+                                <field name="name_seq" readonly="1"/>
+                                <field name="patient_email" widget="email"/>
+
+                            </group>
+                        </group>
+                        <group>
+                            <field name="patient_notes"/>
+                        </group>
+                    </sheet>
+                    <!--TODO chatter-->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <!--TODO Define Search View and filter by gender and group by gender-->
+        <record id="hospital_patient_search" model="ir.ui.view">
+            <field name="name">hospital.patient.search</field>
+            <field name="model">hospital.patient</field>
+            <field name="arch" type="xml">
+                <search string="Search Patients">
+                    <field name="patient_name"
+                           filter_domain="['|',('patient_name', 'ilike', self),('name_seq', 'ilike', self)]"/>
+                    <field name="name_seq"/>
+                    <field name="patient_name"/>
+                    <separator/>
+                    <filter string="Male" name="male" domain="[('gender', '=', 'male')]"/>
+                    <filter string="Female" name="female" domain="[('gender', '=', 'fe_male')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Gender" name="gender" context="{'group_by':'gender'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <!--TODO action of the patient menu-->
+        <record id="action_patient" model="ir.actions.act_window">
+            <field name="name">Patients</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hospital.patient</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create Your First Patient !
+                </p>
+            </field>
+        </record>
+        <menuitem id="hospital_root" name="Hospital" sequence="0" web_icon="hospital,static/description/icon.png"/>
+        <menuitem id="hospital_patient" name="Patients" parent="hospital_root" action="action_patient" sequence="0"/>
+
+        <menuitem id="create_appointment" name="Create Appointment" parent="hospital_root"
+                  action="create_appointment_wizard" sequence="4"/>
+
+    </data>
+</odoo>

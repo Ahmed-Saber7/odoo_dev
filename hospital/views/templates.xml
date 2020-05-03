@@ -1,0 +1,50 @@
+<odoo>
+    <data>
+        <!-- <template id="patients_page" name="Hospital Patients"> -->
+        <!--   <ul> -->
+        <!--     <li t-foreach="objects" t-as="object"> -->
+        <!--       <a t-attf-href="#{ root }/objects/#{ object.id }"> -->
+        <!--         <t t-esc="object.display_name"/> -->
+        <!--       </a> -->
+        <!--     </li> -->
+        <!--   </ul> -->
+        <!-- </template> -->
+        <!-- <template id="object"> -->
+        <!--   <h1><t t-esc="object.display_name"/></h1> -->
+        <!--   <dl> -->
+        <!--     <t t-foreach="object._fields" t-as="field"> -->
+        <!--       <dt><t t-esc="field"/></dt> -->
+        <!--       <dd><t t-esc="object[field]"/></dd> -->
+        <!--     </t> -->
+        <!--   </dl> -->
+        <!-- </template> -->
+
+        <template id="patients_page" name="Hospital Patients">
+            <t t-call="website.layout">
+                <div class="container">
+                    hey ahmed saber ...!
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td>
+                                    Name
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="patients" t-as="patient">
+                                <tr>
+                                    <td>
+                                        <t t-esc="patient.patient_name"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>

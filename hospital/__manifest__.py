@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "hospital",
+    'name': "hospital new3",
 
     'summary': """
         Short (1 phrase/line) summary of the module's purpose, used as
